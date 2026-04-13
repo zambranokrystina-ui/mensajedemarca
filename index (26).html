@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mentes Abundantes — Tarea Clase 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #152038; --orange: #D4762C; --cream: #F5E6C8;
+  --olive: #8B9A5B; --light-bg: #FAF6F0; --white: #FFFFFF;
+  --dark: #2A2A2A; --muted: #6B7280;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito Sans', 'Segoe UI', sans-serif; background: var(--light-bg); min-height: 100vh; }
+
+.header { background: var(--navy); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-brand { color: var(--orange); font-weight: 700; font-size: 15px; letter-spacing: 1px; cursor: pointer; }
+.header-sub { color: var(--cream); font-size: 11px; opacity: 0.8; margin-top: 2px; }
+.btn-back { background: none; border: none; color: var(--cream); font-size: 20px; cursor: pointer; padding: 4px 8px; display: none; }
+
+.container { max-width: 640px; margin: 0 auto; padding: 20px 16px 100px; }
+
+/* Hilo */
+.hilo-box { background: var(--navy); border-radius: 14px; padding: 16px 18px; margin-bottom: 20px; }
+.hilo-label { font-size: 11px; color: var(--orange); font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; }
+.hilo-steps { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hilo-step { border-radius: 8px; padding: 5px 12px; }
+.hilo-step-label { font-size: 9px; font-weight: 700; opacity: 0.75; }
+.hilo-step-text { font-size: 12px; font-weight: 400; }
+.hilo-arrow { color: var(--cream); opacity: 0.3; font-size: 14px; }
+
+/* Select */
+.select-title { font-size: 22px; color: var(--navy); font-weight: 700; text-align: center; margin-bottom: 6px; }
+.select-sub { font-size: 14px; color: var(--muted); text-align: center; margin-bottom: 20px; }
+.info-box { background: rgba(139,154,91,0.12); border: 1px solid rgba(139,154,91,0.3); border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; }
+.info-box-label { font-size: 11px; font-weight: 700; color: var(--olive); margin-bottom: 6px; }
+.info-box-text { font-size: 13px; color: var(--dark); line-height: 1.6; }
+
+.member-card { width: 100%; text-align: left; background: white; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; cursor: pointer; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 12px; display: block; position: relative; }
+.member-card:hover { transform: translateY(-2px); }
+.member-card.done { border-color: var(--olive); }
+.member-done-badge { position: absolute; top: 12px; right: 12px; background: var(--olive); color: white; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: 600; }
+.member-name { font-weight: 700; font-size: 16px; color: var(--navy); margin-bottom: 4px; }
+.member-biz { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.member-valor { background: var(--cream); color: var(--navy); font-size: 11px; padding: 3px 10px; border-radius: 6px; font-weight: 600; display: inline-block; }
+
+.deadline-box { text-align: center; margin-top: 24px; padding: 16px; background: rgba(212,118,44,0.08); border-radius: 12px; border: 1px solid rgba(212,118,44,0.25); }
+.deadline-text { font-size: 13px; color: var(--orange); font-weight: 600; margin-bottom: 4px; }
+.deadline-sub { font-size: 12px; color: var(--muted); }
+
+/* Homework */
+.hw-header { background: var(--navy); border-radius: 16px; padding: 24px 20px; margin-bottom: 20px; position: relative; overflow: hidden; }
+.hw-header::after { content: ''; position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border-radius: 50%; background: var(--orange); opacity: 0.1; }
+.hw-tag { font-size: 12px; color: var(--orange); font-weight: 600; letter-spacing: 1px; margin-bottom: 6px; }
+.hw-name { font-size: 24px; color: white; font-weight: 700; margin-bottom: 4px; }
+.hw-biz { font-size: 14px; color: var(--cream); opacity: 0.85; }
+.hw-valor { margin-top: 12px; display: inline-block; background: rgba(212,118,44,0.3); padding: 4px 12px; border-radius: 8px; font-size: 12px; color: var(--orange); font-weight: 600; }
+
+.hilo-mini { background: rgba(139,154,91,0.1); border: 1px solid rgba(139,154,91,0.25); border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; }
+.hilo-mini-label { font-size: 10px; font-weight: 700; color: var(--olive); letter-spacing: 1px; margin-bottom: 8px; }
+.hilo-mini-steps { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.hilo-pill { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; }
+.hilo-sep { color: var(--muted); font-size: 12px; }
+
+.section { margin-bottom: 24px; background: white; border-radius: 14px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); border: 1px solid #F0F0F0; }
+.section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.section-emoji { font-size: 18px; }
+.section-title { font-size: 17px; font-weight: 700; color: var(--navy); }
+
+.contexto-text { font-size: 14px; color: var(--dark); line-height: 1.7; }
+
+.formula-box { background: var(--cream); border-radius: 12px; padding: 16px 18px; margin-bottom: 10px; }
+.formula-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+.formula-row:last-child { margin-bottom: 0; }
+.formula-label { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; color: white; flex-shrink: 0; margin-top: 2px; }
+.formula-text { font-size: 13px; color: var(--dark); line-height: 1.5; font-style: italic; }
+.formula-note { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+.question-block { margin-bottom: 20px; }
+.question-header { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
+.question-num { background: var(--orange); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.question-text { font-size: 14px; color: var(--navy); font-weight: 600; line-height: 1.5; }
+textarea { width: 100%; border: 1px solid #E5E7EB; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 90px; outline: none; box-sizing: border-box; line-height: 1.6; background: white; transition: border-color 0.2s; }
+textarea:focus { border-color: var(--orange); }
+input[type="text"] { width: 100%; border: 1px solid #E5E7EB; border-radius: 10px; padding: 10px 14px; font-size: 14px; font-family: inherit; outline: none; box-sizing: border-box; background: white; transition: border-color 0.2s; }
+input[type="text"]:focus { border-color: var(--orange); }
+
+.reto-box { background: rgba(139,154,91,0.12); border: 1px solid rgba(139,154,91,0.35); border-radius: 12px; padding: 16px 18px; margin-bottom: 10px; }
+.reto-text { font-size: 14px; color: var(--navy); font-weight: 600; line-height: 1.6; }
+.tip-box { background: rgba(21,32,56,0.06); border: 1px solid rgba(21,32,56,0.1); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; }
+.tip-text { font-size: 12px; color: var(--navy); line-height: 1.6; font-style: italic; }
+
+.tipo-label { font-size: 13px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 8px; }
+.tipo-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.tipo-btn { padding: 8px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 600; border: 1px solid #E5E7EB; background: transparent; color: var(--muted); transition: all 0.2s; }
+.tipo-btn.active { background: var(--orange); color: white; border-color: var(--orange); }
+
+.url-label { font-size: 13px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 6px; }
+
+/* Save bar */
+.save-bar { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, white 30%); padding: 20px 16px 16px; z-index: 40; display: none; }
+.save-bar-inner { max-width: 640px; margin: 0 auto; }
+.btn-save { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 700; font-size: 16px; cursor: pointer; transition: background 0.3s; background: var(--orange); color: white; box-shadow: 0 4px 12px rgba(212,118,44,0.3); font-family: inherit; }
+.btn-save.saved { background: var(--olive); }
+.btn-save:disabled { cursor: wait; opacity: 0.8; }
+
+/* Admin */
+.pw-screen { max-width: 400px; margin: 80px auto; padding: 40px 24px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; }
+.pw-title { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
+.pw-input { width: 100%; padding: 12px 16px; border: 1px solid #E5E7EB; border-radius: 10px; font-size: 16px; outline: none; margin-bottom: 12px; font-family: inherit; }
+.pw-btn { background: var(--orange); color: white; border: none; padding: 12px 32px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.pw-error { color: #EF4444; font-size: 14px; margin-top: 10px; display: none; }
+
+.admin-header { text-align: center; margin-bottom: 20px; }
+.admin-title { font-size: 20px; color: var(--navy); font-weight: 700; margin-bottom: 4px; }
+.admin-sub { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+.progress-bar { height: 6px; background: #E5E7EB; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--olive); border-radius: 3px; transition: width 0.5s; }
+
+.export-btns { display: flex; gap: 10px; margin-bottom: 16px; }
+.btn-export { flex: 1; padding: 12px 16px; border-radius: 10px; border: none; font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; color: white; }
+.btn-navy { background: var(--navy); }
+.btn-orange { background: var(--orange); }
+.btn-olive { background: var(--olive); }
+
+.admin-card { margin-bottom: 10px; border-radius: 12px; overflow: hidden; border: 1px solid #E5E7EB; }
+.admin-card.done { border-color: rgba(139,154,91,0.5); }
+.admin-card-header { width: 100%; display: flex; justify-content: space-between; align-items: center; background: white; border: none; padding: 14px 18px; cursor: pointer; text-align: left; }
+.admin-card.done .admin-card-header { background: rgba(139,154,91,0.08); }
+.admin-card-name { font-weight: 700; font-size: 15px; color: var(--navy); }
+.admin-card-valor { font-size: 12px; color: var(--muted); margin-left: 8px; }
+.admin-badges { display: flex; align-items: center; gap: 8px; }
+.badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; }
+.badge-done { color: var(--olive); background: rgba(139,154,91,0.15); }
+.badge-pending { color: var(--muted); background: #F3F4F6; }
+.badge-content { color: var(--orange); background: rgba(212,118,44,0.12); }
+.admin-arrow { font-size: 14px; color: var(--muted); transition: transform 0.2s; }
+.admin-arrow.open { transform: rotate(180deg); }
+
+.admin-card-body { padding: 16px 18px; background: white; border-top: 1px solid #F0F0F0; display: none; }
+.admin-card-body.open { display: block; }
+.resp-label-orange { font-size: 12px; color: var(--orange); font-weight: 600; margin-bottom: 4px; }
+.resp-label-olive { font-size: 12px; color: var(--olive); font-weight: 600; margin-bottom: 4px; }
+.resp-q { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.resp-answer { font-size: 14px; color: var(--dark); background: var(--light-bg); padding: 10px 12px; border-radius: 8px; line-height: 1.6; margin-bottom: 14px; }
+.resp-answer em { color: #CCC; }
+.contenido-box { background: var(--cream); padding: 12px 14px; border-radius: 10px; margin-top: 8px; }
+.contenido-title { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.contenido-link a { color: var(--orange); font-size: 13px; }
+
+.reset-section { margin-top: 24px; text-align: center; }
+.btn-reset { padding: 10px 20px; border-radius: 8px; border: 1px solid #E5E7EB; background: white; color: #EF4444; font-size: 12px; cursor: pointer; font-family: inherit; }
+.reset-confirm { background: #FEF2F2; border: 1px solid #FECACA; border-radius: 10px; padding: 16px; display: none; }
+.reset-confirm-text { font-size: 13px; color: #DC2626; font-weight: 600; margin-bottom: 12px; }
+.reset-confirm-btns { display: flex; gap: 10px; justify-content: center; }
+.btn-reset-yes { padding: 10px 24px; border-radius: 8px; border: none; background: #DC2626; color: white; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.btn-reset-no { padding: 10px 24px; border-radius: 8px; border: 1px solid #E5E7EB; background: white; color: var(--muted); font-size: 13px; cursor: pointer; font-family: inherit; }
+
+.hidden { display: none !important; }
+.pb-100 { padding-bottom: 100px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <button class="btn-back" id="btnBack" onclick="goBack()">←</button>
+    <div onclick="handleLogoTap()" style="cursor:pointer">
+      <div class="header-brand">MENTES ABUNDANTES</div>
+      <div class="header-sub">Tu Voz Antes que Tu Nicho</div>
+    </div>
+  </div>
+</div>
+
+<div id="screenSelect" class="container"></div>
+<div id="screenHomework" class="container pb-100 hidden"></div>
+<div id="screenAdminLogin" class="hidden">
+  <div class="pw-screen">
+    <div class="pw-title">🔒 Panel de Administración</div>
+    <input type="password" class="pw-input" id="pwInput" placeholder="Contraseña" onkeydown="if(event.key==='Enter')checkPassword()">
+    <button class="pw-btn" onclick="checkPassword()">Entrar</button>
+    <div class="pw-error" id="pwError">Contraseña incorrecta</div>
+  </div>
+</div>
+<div id="screenAdmin" class="container hidden"></div>
+<div class="save-bar" id="saveBar">
+  <div class="save-bar-inner">
+    <button class="btn-save" id="btnSave" onclick="saveResponses()">💾 Guardar Mis Respuestas</button>
+  </div>
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfXy4yEj9aiMEsgnrncJdgjMfGDAIQY0GmzXFu7HkQm_KVY4iFEmux3pJmtwErQNmINw/exec";
+const ADMIN_PASSWORD = "mentes2026";
+
+// ── Data ────────────────────────────────────────────────────
+const MEMBERS = [
+  {
+    id: "anahi", name: "Anahí", business: "EIA Wellness / Esthetics / Visuals", valor: "CLARIDAD",
+    contexto: "Hoy elegiste una dirección y empezaste a construir tu mensaje desde tu valor. Ese acto de elegir — aunque se sienta incompleto — ya es comunicación. Tu audiencia no necesita que lo tengas todo perfecto. Necesita saber que tú sabes a dónde vas.",
+    questions: ["¿Cuál fue el negocio que elegiste representar hoy en tu mensaje? ¿Por qué ese y no los otros?","Escribe tu frase Historia → Postura → Promesa tal como quedó al final de la sesión de hoy (aunque no esté perfecta).","¿Qué parte de tu mensaje sentiste más auténtica? ¿Qué parte sientes que todavía no te suena como tú?"],
+    reto: "Convierte tu frase de hoy en un contenido real: reel hablando a cámara, post de texto, o audio de WhatsApp. Publícalo o compártelo en el grupo antes del jueves. No lo perfecciones — publícalo.",
+    retoProfundo: "Antes de publicar, pregúntate: ¿Esta frase la diría en una conversación real? Si la respuesta es no, cámbiala hasta que sí lo sea."
+  },
+  {
+    id: "wanda", name: "Wanda Bonilla", business: "Dielees Sweets & More", valor: "FAMILIA",
+    contexto: "Llevas 11 años creando momentos de celebración. Hoy pusiste en palabras algo que ya hacías con las manos: crear la mesa donde la familia se reúne. Tu mensaje no es sobre comida — es sobre lo que pasa cuando las personas se juntan. Ese es tu diferenciador.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy. No la edites — escríbela como salió.","Cuando compartiste tu mensaje en la sala pequeña, ¿qué reacción tuvieron tus compañeras? ¿Qué te dijeron?","¿Cómo se conecta tu valor FAMILIA con la historia que escribiste hoy? ¿Se nota esa conexión en tu frase?"],
+    reto: "Graba un reel de 30 segundos contando la historia de UNA celebración que preparaste y lo que sintió el cliente. No menciones los ingredientes. Solo el momento. Compártelo en el grupo antes del jueves.",
+    retoProfundo: "Si tu audiencia leyera tu mensaje hoy, ¿sabría que para ti la familia es sagrada? Eso es lo que debe quedar claro."
+  },
+  {
+    id: "arelis", name: "Arelis Rodríguez Ch", business: "Marca personal — Belleza, bienestar y salud visual", valor: "BIENESTAR INTEGRAL",
+    contexto: "Tu reto siempre ha sido encontrar el hilo que conecta tus múltiples líneas. Hoy empezaste a articular ese hilo desde tu historia. El bienestar integral no es un concepto — es el resultado que todas tus clientas buscan cuando llegan a ti, vengan de donde vengan.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy.","¿Lograste que tu mensaje conectara todas tus líneas de negocio en una sola idea? Si no, ¿cuál línea dominó y por qué?","¿Qué fue lo más difícil de construir tu mensaje hoy? ¿Fue la historia, la postura o la promesa?"],
+    reto: "Escribe un post de texto donde cuentes en 3 párrafos: por qué empezaste, qué crees sobre el bienestar de la mujer, y qué ofreces. Usa la fórmula de hoy. Compártelo en el grupo antes del jueves.",
+    retoProfundo: "El mensaje que conecta todo no es el que explica todo — es el que hace sentir algo. ¿Tu frase hace sentir algo?"
+  },
+  {
+    id: "liz", name: "Liz Jara", business: "Mentoría en Transformación Personal y Financiera — Alquimia", valor: "COMPROMISO",
+    contexto: "Hoy no fue solo una clase de marketing — fue un espejo. Construir tu mensaje en voz alta frente a otras personas es exactamente el tipo de compromiso que tu programa Alquimia necesita de ti. Cada vez que lo compartes, se vuelve más real.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy.","¿Cómo se siente leer tu mensaje en voz alta? ¿Qué parte te genera incomodidad y por qué?","Tu valor es el COMPROMISO. ¿Tu mensaje de hoy refleja el compromiso que tú misma vives? Sé honesta."],
+    reto: "Esta semana el reto es doble: publica el contenido basado en tu mensaje (reel, post o audio) Y comparte una acción diaria relacionada con Alquimia en el grupo de WhatsApp. 7 días, 7 acciones.",
+    retoProfundo: "El mensaje que publiques esta semana no tiene que ser perfecto. Tiene que ser tuyo. La consistencia es el mensaje."
+  },
+  {
+    id: "misladys", name: "Misladys", business: "Espazioconproposito — Armonización energética", valor: "PAZ",
+    contexto: "Hoy construiste un mensaje que traduce lo invisible en algo que cualquiera puede sentir. La armonización energética puede ser difícil de explicar — pero la paz en el hogar la entiende todo el mundo. Ese puente que hiciste hoy es tu mayor activo comunicacional.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy.","En la sala pequeña, ¿pudieron tus compañeras entender lo que haces sin que usaras palabras técnicas? ¿Qué dijeron?","¿Tu mensaje de hoy lo podría entender alguien que nunca ha escuchado sobre Reiki o energía? Si no, ¿cómo lo simplificarías?"],
+    reto: "Graba un video o audio de 60 segundos donde le cuentes a una amiga que no sabe nada de energía QUÉ haces y POR QUÉ. Sin palabras técnicas. Solo el resultado: paz. Compártelo en el grupo antes del jueves.",
+    retoProfundo: "No vendes Reiki. Vendes la sensación de llegar a casa y respirar diferente. Eso es lo que tu contenido debe transmitir."
+  },
+  {
+    id: "mimi", name: "Mimi Marianella", business: "Mimistar — Construcción + Marketing de afiliados", valor: "AUTENTICIDAD",
+    contexto: "Hoy fue un momento clave: tuviste que elegir cuál de tus dos mundos lidera tu mensaje. La autenticidad no se puede dividir entre dos direcciones — necesita un centro. Lo que escribiste hoy te da pistas sobre dónde está ese centro.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy.","Al escribir tu mensaje, ¿cuál de tus dos negocios fue más fácil de conectar con tu historia personal? ¿Por qué?","Si tu audiencia ideal leyera tu mensaje de hoy, ¿podría identificarse con él? ¿A quién le estás hablando realmente?"],
+    reto: "Elige UNO de tus dos negocios y publica un contenido esta semana desde ese lugar. El contenido debe comenzar con tu historia, no con el producto. Compártelo en el grupo antes del jueves.",
+    retoProfundo: "La autenticidad no es mostrar todo. Es mostrar lo que es verdadero. ¿Qué es lo más verdadero que puedes decir sobre por qué haces lo que haces?"
+  },
+  {
+    id: "floredith", name: "Floredith", business: "Unique Cleaning Services LLC", valor: "RESPETO",
+    contexto: "Hoy diste un paso enorme: dejaste de describir tu negocio como un servicio de limpieza y empezaste a describir lo que realmente ofreces — el respeto por el espacio de alguien. Ese cambio de perspectiva es el corazón de tu marca.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy.","¿Lograste describir lo que el cliente SIENTE cuando llega a su casa después de tu servicio? ¿Cómo lo describiste?","¿Cómo se conecta tu valor RESPETO con la forma en que tratas el espacio de tus clientes? ¿Lo mencionas en tu mensaje?"],
+    reto: "Escribe 3 oraciones describiendo tu servicio SIN usar la palabra 'limpieza'. Solo el resultado emocional. Luego conviértelas en un post o reel y compártelo en el grupo antes del jueves.",
+    retoProfundo: "Tu cliente no te contrata para limpiar. Te contrata para recuperar su tranquilidad. Ese es el mensaje que diferencia a Unique Cleaning de todas las demás."
+  },
+  {
+    id: "joanmirse", name: "Joanmirse Chacoa", business: "Bienestar y efectividad para madres emprendedoras", valor: "ENFOQUE",
+    contexto: "Aunque no tienes negocio formal todavía, hoy construiste algo más valioso: tu mensaje de origen. El problema que quieres resolver es real y lo viviste en carne propia. Esa historia personal es tu mayor credencial — antes que cualquier certificación.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy, aunque tu negocio aún no esté definido.","¿Qué parte de tu historia personal usaste para construir tu mensaje? ¿Fue fácil o difícil compartirla?","¿Tu mensaje de hoy le hablaría a una madre emprendedora que está exactamente donde tú estabas antes? ¿Cómo lo sabes?"],
+    reto: "Escribe un párrafo contando tu historia de agotamiento y el momento en que encontraste el enfoque. Publícalo como post de texto esta semana. No necesitas tener el negocio listo para empezar a construir tu audiencia. Compártelo en el grupo antes del jueves.",
+    retoProfundo: "Las personas no te siguen porque tienes un negocio perfecto. Te siguen porque se ven en tu historia. Empieza a contar la tuya."
+  },
+  {
+    id: "ady", name: "Ady", business: "Servicios Financieros — Pólizas, 401k, will & trust", valor: "PROTECCIÓN",
+    contexto: "Hoy tu mensaje tomó una forma muy poderosa: el de alguien que protege familias latinas no desde un catálogo de productos, sino desde una experiencia personal de dolor y aprendizaje. Esa historia es lo que ningún otro agente financiero puede copiar porque es tuya.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy.","¿Mencionaste en tu mensaje la situación personal que te llevó a este negocio? ¿Cómo reaccionaron tus compañeras cuando la escucharon?","¿Cómo describes la protección que ofreces sin usar lenguaje técnico de seguros? ¿Qué palabras usaste hoy?"],
+    reto: "Graba un audio o video de 60 segundos contándole a una familia hispana POR QUÉ haces lo que haces — desde tu historia personal. No menciones productos ni precios. Solo el por qué. Compártelo en el grupo antes del jueves.",
+    retoProfundo: "No vendes seguros. Vendes la tranquilidad de saber que tu familia está protegida si algo pasa. Eso es un legado. Comunícalo así."
+  },
+  {
+    id: "luisandra", name: "Luisandra Rodríguez", business: "Comunidad de crecimiento personal y marketing digital", valor: "CONFIANZA",
+    contexto: "Hoy fue el día en que dejaste de hablar como aprendiz y empezaste a hablar como guía. Dos años de recorrido te dan autoridad. El mensaje que construiste hoy debe reflejar esa transición — de 'estoy aprendiendo contigo' a 'ya caminé este camino y te muestro cómo'.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy.","¿Tu mensaje de hoy suena como el de una experta o como el de alguien que todavía está dudando? ¿Qué palabras delataron esa duda?","¿Qué logro concreto de estos 2 años incluiste (o deberías incluir) en tu mensaje para darle credibilidad?"],
+    reto: "Escribe y publica un post esta semana presentándote como EXPERTA. Menciona algo que hayas logrado, algo que enseñas, y a quién ayudas. Sin frases como 'todavía estoy aprendiendo'. Compártelo en el grupo antes del jueves.",
+    retoProfundo: "La confianza no se pide — se declara. Esta semana, declárala."
+  },
+  {
+    id: "desiree", name: "Desiree Castañeda", business: "Franquicia Personal Rent A House — Venezuela", valor: "CONFIANZA",
+    contexto: "Cinco años en bienes raíces te dan algo que no se improvisa: una reputación construida caso a caso. Hoy el reto fue articular ese diferenciador en palabras. La confianza que transmites no puede quedarse solo en la experiencia en vivo — tiene que verse en tu contenido digital.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy.","¿Qué hace diferente tu acompañamiento al de otros asesores de Rent A House? ¿Lograste capturarlo en tu mensaje?","Si alguien te ve en redes sociales por primera vez hoy, ¿siente que puede confiar en ti? ¿Qué debe cambiar en tu mensaje para que eso ocurra?"],
+    reto: "Escribe 3 razones por las que un cliente debería elegirte A TI — razones que solo apliquen a Desiree Castañeda, no a Rent A House en general. Conviértelas en un post o reel y compártelo en el grupo antes del jueves.",
+    retoProfundo: "En bienes raíces la gente no compra una propiedad — compra la certeza de que está tomando la mejor decisión. Tu mensaje debe hacer sentir esa certeza."
+  },
+  {
+    id: "mayra", name: "Mayra", business: "En desarrollo", valor: "VALORES COMO BRÚJULA",
+    contexto: "Esta semana diste el ejemplo más poderoso del grupo: usaste lo aprendido en clase para ayudar a tu esposo a tomar una decisión difícil desde sus valores. Eso no es teoría — es la prueba de que lo que aprendes aquí cambia vidas reales. Ese testimonio ya es parte de tu mensaje.",
+    questions: ["Escribe tu frase Historia → Postura → Promesa tal como quedó hoy en clase.","La historia que viviste con tu esposo esta semana es un testimonio poderoso. ¿Cómo podrías incorporarla en tu mensaje de marca?","¿Qué aprendiste sobre ti misma al construir tu mensaje hoy? ¿Qué parte fue más fácil de lo que esperabas?"],
+    reto: "Comparte en el grupo (audio, texto o video) la historia de cómo los valores que aprendiste aquí impactaron una decisión real en tu vida esta semana. Eso ya es contenido. Eso ya es tu mensaje.",
+    retoProfundo: "Tu testimonio de esta semana es exactamente lo que otras mujeres necesitan escuchar para entender por qué esto importa. No lo guardes — compártelo."
+  }
+];
+
+// ── State ────────────────────────────────────────────────────
+let currentScreen = "select";
+let currentMember = null;
+let currentResponses = {};
+let logoTapCount = 0;
+let logoTapTimer = null;
+let selectedTipo = "";
+
+function handleLogoTap() {
+  logoTapCount++;
+  clearTimeout(logoTapTimer);
+  logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 2000);
+  if (logoTapCount >= 5) { logoTapCount = 0; showAdminLogin(); }
+}
+
+// ── Storage ──────────────────────────────────────────────────
+function storageKey(id) { return "clase2:" + id; }
+function saveLocal(id, data) { localStorage.setItem(storageKey(id), JSON.stringify(data)); }
+function loadLocal(id) {
+  const v = localStorage.getItem(storageKey(id));
+  return v ? JSON.parse(v) : null;
+}
+function clearLocal(id) { localStorage.removeItem(storageKey(id)); }
+function getAllLocal() {
+  const all = {};
+  MEMBERS.forEach(m => {
+    const d = loadLocal(m.id);
+    if (d) all[m.id] = d;
+  });
+  return all;
+}
+
+async function sendToSheets(member, responses) {
+  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "") return;
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        timestamp: new Date().toISOString(),
+        nombre: member.name,
+        negocio: member.business,
+        valor: member.valor,
+        respuesta_1: responses.q0 || "",
+        respuesta_2: responses.q1 || "",
+        respuesta_3: responses.q2 || "",
+        plan_contenido: responses.reto || "",
+        tipo_contenido: responses.contenidoTipo || "",
+        link_contenido: responses.contenidoUrl || ""
+      })
+    });
+  } catch(e) {}
+}
+
+// ── Navigation ───────────────────────────────────────────────
+function showScreen(name) {
+  ["screenSelect","screenHomework","screenAdminLogin","screenAdmin"].forEach(id => {
+    document.getElementById(id).classList.add("hidden");
+  });
+  document.getElementById("screen" + name.charAt(0).toUpperCase() + name.slice(1)).classList.remove("hidden");
+  document.getElementById("btnBack").style.display = (name === "select") ? "none" : "block";
+  document.getElementById("saveBar").style.display = (name === "homework") ? "block" : "none";
+  window.scrollTo(0, 0);
+  currentScreen = name;
+}
+
+function goBack() {
+  if (currentScreen === "homework") { showScreen("select"); renderSelect(); }
+  else if (currentScreen === "admin") { showScreen("select"); renderSelect(); }
+  else if (currentScreen === "adminLogin") { showScreen("select"); renderSelect(); }
+}
+
+// ── Select Screen ────────────────────────────────────────────
+function renderSelect() {
+  const allData = getAllLocal();
+  const el = document.getElementById("screenSelect");
+  el.innerHTML = `
+    <div class="hilo-box">
+      <div class="hilo-label">EL HILO DEL PROGRAMA</div>
+      <div class="hilo-steps">
+        <div class="hilo-step" style="background:var(--olive)">
+          <div class="hilo-step-label" style="color:white">Clase 1</div>
+          <div class="hilo-step-text" style="color:white">Valores</div>
+        </div>
+        <span class="hilo-arrow">→</span>
+        <div class="hilo-step" style="background:var(--orange)">
+          <div class="hilo-step-label" style="color:var(--navy)">Clase 2</div>
+          <div class="hilo-step-text" style="color:var(--navy);font-weight:700">Tu Mensaje</div>
+        </div>
+        <span class="hilo-arrow">→</span>
+        <div class="hilo-step" style="border:1px solid rgba(245,230,200,0.25)">
+          <div class="hilo-step-label" style="color:var(--cream);opacity:0.7">Clase 3</div>
+          <div class="hilo-step-text" style="color:var(--cream)">Propósito</div>
+        </div>
+        <span class="hilo-arrow">→</span>
+        <div class="hilo-step" style="border:1px solid rgba(245,230,200,0.25)">
+          <div class="hilo-step-label" style="color:var(--cream);opacity:0.7">Clase 4</div>
+          <div class="hilo-step-text" style="color:var(--cream)">Marca</div>
+        </div>
+      </div>
+    </div>
+    <h1 class="select-title">Tarea Clase 2</h1>
+    <p class="select-sub">Tu Mensaje de Marca — selecciona tu nombre</p>
+    <div class="info-box">
+      <div class="info-box-label">LO QUE CONSTRUISTE HOY</div>
+      <div class="info-box-text">Historia → Postura → Promesa. Esta tarea te ayuda a afinarlo y convertirlo en contenido real antes del jueves.</div>
+    </div>
+    <div id="memberList">
+      ${MEMBERS.map(m => `
+        <button class="member-card ${allData[m.id] ? 'done' : ''}" onclick="selectMember('${m.id}')">
+          ${allData[m.id] ? '<span class="member-done-badge">✓ Completada</span>' : ''}
+          <div class="member-name">${m.name}</div>
+          <div class="member-biz">${m.business}</div>
+          <span class="member-valor">Valor: ${m.valor}</span>
+        </button>
+      `).join('')}
+    </div>
+    <div class="deadline-box">
+      <div class="deadline-text">📅 Fecha límite: Jueves antes de la próxima sesión</div>
+      <div class="deadline-sub">Comparte tu contenido en el grupo de WhatsApp</div>
+    </div>
+  `;
+  showScreen("select");
+}
+
+function selectMember(id) {
+  currentMember = MEMBERS.find(m => m.id === id);
+  currentResponses = loadLocal(id) || { q0:"", q1:"", q2:"", reto:"", contenidoTipo:"", contenidoUrl:"" };
+  selectedTipo = currentResponses.contenidoTipo || "";
+  renderHomework();
+  showScreen("homework");
+}
+
+// ── Homework Screen ──────────────────────────────────────────
+function renderHomework() {
+  const m = currentMember;
+  const r = currentResponses;
+  const tipos = ["Reel","Post de texto","Audio de WhatsApp","Video","Historia"];
+
+  document.getElementById("screenHomework").innerHTML = `
+    <div class="hw-header">
+      <div class="hw-tag">CLASE 2 — TU MENSAJE DE MARCA</div>
+      <div class="hw-name">${m.name}</div>
+      <div class="hw-biz">${m.business}</div>
+      <div class="hw-valor">Valor: ${m.valor}</div>
+    </div>
+
+    <div class="hilo-mini">
+      <div class="hilo-mini-label">TU HILO EN EL PROGRAMA</div>
+      <div class="hilo-mini-steps">
+        <span class="hilo-pill" style="background:var(--olive);color:white">✓ Clase 1: Valores</span>
+        <span class="hilo-sep">→</span>
+        <span class="hilo-pill" style="background:var(--orange);color:white">← Aquí: Tu Mensaje</span>
+        <span class="hilo-sep">→</span>
+        <span class="hilo-pill" style="background:#E5E7EB;color:var(--muted)">Clase 3: Propósito</span>
+        <span class="hilo-sep">→</span>
+        <span class="hilo-pill" style="background:#E5E7EB;color:var(--muted)">Clase 4: Marca</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><span class="section-emoji">🔍</span><span class="section-title">Dónde Estás Hoy</span></div>
+      <p class="contexto-text">${m.contexto}</p>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><span class="section-emoji">📐</span><span class="section-title">La Fórmula de Hoy</span></div>
+      <div class="formula-box">
+        <div class="formula-row">
+          <span class="formula-label" style="background:var(--navy)">Historia</span>
+          <span class="formula-text">Empecé [negocio] porque [razón personal].</span>
+        </div>
+        <div class="formula-row">
+          <span class="formula-label" style="background:var(--orange)">Postura</span>
+          <span class="formula-text">Creo que [lo que crees sobre tu industria].</span>
+        </div>
+        <div class="formula-row">
+          <span class="formula-label" style="background:var(--olive)">Promesa</span>
+          <span class="formula-text">Si tú también [problema], [promesa / invitación].</span>
+        </div>
+      </div>
+      <p class="formula-note">Esta no es una fórmula rígida — es un mapa. Ajústala hasta que suene como tú.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><span class="section-emoji">💭</span><span class="section-title">Preguntas de Reflexión</span></div>
+      ${m.questions.map((q,i) => `
+        <div class="question-block">
+          <div class="question-header">
+            <span class="question-num">${i+1}</span>
+            <span class="question-text">${q}</span>
+          </div>
+          <textarea id="q${i}" placeholder="Escribe tu respuesta aquí..." oninput="updateResponse('q${i}',this.value)">${r['q'+i]||''}</textarea>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="section">
+      <div class="section-header"><span class="section-emoji">🎯</span><span class="section-title">Tu Reto de la Semana</span></div>
+      <div class="reto-box"><p class="reto-text">${m.reto}</p></div>
+      <div class="tip-box"><p class="tip-text">💡 ${m.retoProfundo}</p></div>
+      <textarea id="qreto" style="min-height:100px" placeholder="¿Qué contenido vas a crear? Escribe tu plan aquí..." oninput="updateResponse('reto',this.value)">${r.reto||''}</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><span class="section-emoji">📲</span><span class="section-title">Tu Contenido (cuando lo publiques)</span></div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.5">Cuando publiques tu contenido esta semana, regresa aquí y comparte los detalles:</p>
+      <span class="tipo-label">¿Qué tipo de contenido creaste?</span>
+      <div class="tipo-btns" id="tipoBtns">
+        ${tipos.map(t => `<button class="tipo-btn ${selectedTipo===t?'active':''}" onclick="selectTipo('${t}')">${t}</button>`).join('')}
+      </div>
+      <span class="url-label">Link del contenido publicado (opcional):</span>
+      <input type="text" id="qurl" value="${r.contenidoUrl||''}" placeholder="https://instagram.com/p/..." oninput="updateResponse('contenidoUrl',this.value)">
+    </div>
+  `;
+}
+
+function updateResponse(key, val) {
+  currentResponses[key] = val;
+  const btn = document.getElementById("btnSave");
+  btn.textContent = "💾 Guardar Mis Respuestas";
+  btn.className = "btn-save";
+}
+
+function selectTipo(tipo) {
+  selectedTipo = tipo;
+  currentResponses.contenidoTipo = tipo;
+  document.querySelectorAll(".tipo-btn").forEach(b => {
+    b.className = "tipo-btn" + (b.textContent === tipo ? " active" : "");
+  });
+}
+
+async function saveResponses() {
+  const btn = document.getElementById("btnSave");
+  btn.textContent = "Guardando..."; btn.disabled = true;
+  saveLocal(currentMember.id, currentResponses);
+  await sendToSheets(currentMember, currentResponses);
+  btn.textContent = "✓ ¡Guardado con éxito!"; btn.className = "btn-save saved"; btn.disabled = false;
+  setTimeout(() => { btn.textContent = "💾 Guardar Mis Respuestas"; btn.className = "btn-save"; }, 3000);
+}
+
+// ── Admin ────────────────────────────────────────────────────
+function showAdminLogin() { showScreen("adminLogin"); }
+
+function checkPassword() {
+  const pw = document.getElementById("pwInput").value;
+  if (pw === ADMIN_PASSWORD) {
+    document.getElementById("pwInput").value = "";
+    renderAdmin();
+    showScreen("admin");
+  } else {
+    document.getElementById("pwError").style.display = "block";
+    setTimeout(() => { document.getElementById("pwError").style.display = "none"; }, 2000);
+  }
+}
+
+function renderAdmin() {
+  const allData = getAllLocal();
+  const count = Object.keys(allData).length;
+  const conContenido = Object.values(allData).filter(d => d.contenidoTipo).length;
+  const pct = Math.round((count / MEMBERS.length) * 100);
+
+  let html = `
+    <div class="admin-header">
+      <h1 class="admin-title">Panel — Clase 2</h1>
+      <p class="admin-sub">${count} de ${MEMBERS.length} han respondido · ${conContenido} publicaron contenido</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="export-btns">
+      <button class="btn-export btn-navy" onclick="downloadCSV()">📥 Descargar CSV</button>
+      <button class="btn-export btn-orange" id="btnCopy" onclick="copyCSV()">📋 Copiar para Sheets</button>
+    </div>
+  `;
+
+  MEMBERS.forEach(m => {
+    const data = allData[m.id];
+    html += `
+      <div class="admin-card ${data?'done':''}" id="card_${m.id}">
+        <button class="admin-card-header" onclick="toggleCard('${m.id}')">
+          <div>
+            <span class="admin-card-name">${m.name}</span>
+            <span class="admin-card-valor">${m.valor}</span>
+          </div>
+          <div class="admin-badges">
+            ${data ? `<span class="badge badge-done">✓ Completada</span>` : `<span class="badge badge-pending">Pendiente</span>`}
+            ${data && data.contenidoTipo ? `<span class="badge badge-content">${data.contenidoTipo}</span>` : ''}
+            <span class="admin-arrow" id="arrow_${m.id}">▼</span>
+          </div>
+        </button>
+        <div class="admin-card-body" id="body_${m.id}">
+          ${data ? `
+            ${m.questions.map((q,i) => `
+              <div class="resp-label-orange">Pregunta ${i+1}</div>
+              <div class="resp-q">${q}</div>
+              <div class="resp-answer">${data['q'+i] || '<em>Sin respuesta</em>'}</div>
+            `).join('')}
+            ${data.reto ? `
+              <div class="resp-label-olive">Plan de Contenido</div>
+              <div class="resp-answer" style="background:rgba(139,154,91,0.08)">${data.reto}</div>
+            ` : ''}
+            ${data.contenidoTipo || data.contenidoUrl ? `
+              <div class="contenido-box">
+                <div class="contenido-title">Contenido Publicado</div>
+                ${data.contenidoTipo ? `<p style="font-size:13px;margin-bottom:4px"><strong>Formato:</strong> ${data.contenidoTipo}</p>` : ''}
+                ${data.contenidoUrl ? `<div class="contenido-link"><strong>Link:</strong> <a href="${data.contenidoUrl}" target="_blank">${data.contenidoUrl}</a></div>` : ''}
+              </div>
+            ` : ''}
+          ` : `<p style="font-size:14px;color:var(--muted);text-align:center;padding:10px 0">Aún no ha enviado respuestas</p>`}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `
+    <div class="reset-section">
+      <button class="btn-reset" onclick="document.getElementById('resetConfirm').style.display='block'">🗑 Limpiar todas las respuestas</button>
+      <div class="reset-confirm" id="resetConfirm">
+        <p class="reset-confirm-text">¿Estás segura? Esto borrará TODAS las respuestas de la Clase 2.</p>
+        <div class="reset-confirm-btns">
+          <button class="btn-reset-yes" onclick="resetAll()">Sí, borrar todo</button>
+          <button class="btn-reset-no" onclick="document.getElementById('resetConfirm').style.display='none'">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("screenAdmin").innerHTML = html;
+}
+
+function toggleCard(id) {
+  const body = document.getElementById("body_" + id);
+  const arrow = document.getElementById("arrow_" + id);
+  const isOpen = body.classList.contains("open");
+  body.classList.toggle("open", !isOpen);
+  arrow.classList.toggle("open", !isOpen);
+}
+
+function resetAll() {
+  MEMBERS.forEach(m => clearLocal(m.id));
+  renderAdmin();
+  document.getElementById("resetConfirm").style.display = "none";
+}
+
+// ── CSV ──────────────────────────────────────────────────────
+function generateCSV() {
+  const headers = ["Nombre","Negocio","Valor","Pregunta 1","Pregunta 2","Pregunta 3","Plan de Contenido","Tipo de Contenido","Link Publicado"];
+  const esc = v => '"' + (v||"").replace(/"/g,'""').replace(/\n/g," ") + '"';
+  const allData = getAllLocal();
+  const rows = MEMBERS.filter(m => allData[m.id]).map(m => {
+    const d = allData[m.id];
+    return [m.name, m.business, m.valor, d.q0, d.q1, d.q2, d.reto, d.contenidoTipo, d.contenidoUrl].map(esc).join(",");
+  });
+  return headers.join(",") + "\n" + rows.join("\n");
+}
+
+function downloadCSV() {
+  const csv = "\uFEFF" + generateCSV();
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "Respuestas_Clase2_Mensaje_Marca.csv"; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function copyCSV() {
+  navigator.clipboard.writeText(generateCSV()).then(() => {
+    const btn = document.getElementById("btnCopy");
+    btn.textContent = "✓ ¡Copiado!"; btn.className = "btn-export btn-olive";
+    setTimeout(() => { btn.textContent = "📋 Copiar para Sheets"; btn.className = "btn-export btn-orange"; }, 3000);
+  });
+}
+
+// ── Init ─────────────────────────────────────────────────────
+renderSelect();
+</script>
+</body>
+</html>
